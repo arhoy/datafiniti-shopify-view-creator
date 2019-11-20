@@ -15,6 +15,9 @@ router.post(
   '/:productSlug',
   auth,
   [
+    check('title', 'Product title is required!')
+      .not()
+      .isEmpty(),
     check('description', 'Description is required!')
       .not()
       .isEmpty(),
@@ -32,8 +35,9 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      const { rating, description } = req.body;
+      const { rating, description, title } = req.body;
       const review = await new Review({
+        title,
         user: req.user.id,
         productSlug: req.params.productSlug,
         description,
@@ -54,7 +58,7 @@ router.post(
 // Route        :   api/reviews
 // Description  :   Returns all of the reviews created
 // Access       :   Public, anyone call see the reviews
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const reviews = await Review.find();
     res.json({
@@ -72,7 +76,7 @@ router.get('/', auth, async (req, res) => {
 // Route        :   api/reviews/:productSlug
 // Description  :   Returns all of the reviews for a specific product slug
 // Access       :   Public, anyone call see the reviews
-router.get('/:productSlug', auth, async (req, res) => {
+router.get('/:productSlug', async (req, res) => {
   try {
     const reviews = await Review.find({ productSlug: req.params.productSlug });
     res.json({

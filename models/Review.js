@@ -7,6 +7,13 @@ const ReviewSchema = new Schema(
       type: String,
       required: [true, 'Review must be attached to a product slug'],
     },
+    title: {
+      type: String,
+      required: [true, 'Review must have a title'],
+      trim: true,
+      maxlength: [30, 'Your review must be less than 30 characters'],
+      minlength: [10, 'Your review must be 10 or more characters'],
+    },
     description: {
       type: String,
       required: [true, 'Review must not be empty'],
