@@ -13,7 +13,7 @@ const ProfileSchema = new Schema({
     type: Number,
   },
   phoneNumber: {
-    type: Number,
+    type: String,
   },
   about: {
     type: String,
