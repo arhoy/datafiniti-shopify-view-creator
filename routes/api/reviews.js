@@ -8,11 +8,11 @@ const Review = require('../../models/Review');
 
 // Name         :   Create new review
 // Type         :   POST
-// Route        :   api/reviews/:productSlug
+// Route        :   api/reviews/review/:productSlug
 // Description  :   User creates new review for specific product Slug
 // Access       :   Any one logged in can create a review
 router.post(
-  '/:productSlug',
+  '/review/:productSlug',
   auth,
   [
     check(
@@ -74,10 +74,10 @@ router.get('/', async (req, res) => {
 
 // Name         :   Get specific review
 // Type         :   GET
-// Route        :   api/reviews/:reviewId
+// Route        :   api/reviews/review/:reviewId
 // Description  :   Returns specific review
 // Access       :   Public
-router.get('/:reviewId', async (req, res) => {
+router.get('/review/:reviewId', async (req, res) => {
   try {
     const review = await Review.findById(req.params.reviewId);
     if (!review) return res.status(404).json({ msg: 'Review not found!' });
@@ -90,11 +90,11 @@ router.get('/:reviewId', async (req, res) => {
 
 // Name         :   Edit specific review
 // Type         :   PUT
-// Route        :   api/reviews/:reviewId
+// Route        :   api/reviews/review/:reviewId
 // Description  :   Edit the specific review
 // Access       :   Only user can edit review
 router.put(
-  '/:reviewId',
+  'review/:reviewId',
   auth,
   [
     check(
@@ -146,10 +146,10 @@ router.put(
 
 // Name         :   Delete specific review
 // Type         :   DELETE
-// Route        :   api/reviews/:reviewId
+// Route        :   api/reviews/review/:reviewId
 // Description  :   Delete a specific review
 // Access       :   Private, only logged user can delete his or her review
-router.delete('/:reviewId', auth, async (req, res) => {
+router.delete('/review/:reviewId', auth, async (req, res) => {
   try {
     const review = await Review.findById(req.params.reviewId);
 
