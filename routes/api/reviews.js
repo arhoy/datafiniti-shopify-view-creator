@@ -194,6 +194,11 @@ router.put('/like/:reviewId', auth, async (req, res) => {
   try {
     const review = await Review.findById(req.params.reviewId);
 
+    // check if review exists
+    if (!review) {
+      return res.status(400).json({ msg: 'Review was not found!' });
+    }
+
     // check if the review has already been liked.
     if (
       review.likes.filter(like => like.user.toString() === req.user.id).length >
@@ -208,7 +213,7 @@ router.put('/like/:reviewId', auth, async (req, res) => {
     res.json(review.likes);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('Server Errors');
+    res.status(500).send('Server Error');
   }
 });
 
@@ -220,6 +225,11 @@ router.put('/like/:reviewId', auth, async (req, res) => {
 router.put('/unlike/:reviewId', auth, async (req, res) => {
   try {
     const review = await Review.findById(req.params.reviewId);
+
+    // check if review exists
+    if (!review) {
+      return res.status(400).json({ msg: 'Review was not found!' });
+    }
     // check if the review has not been liked yet
     if (
       review.likes.filter(like => like.user.toString() === req.user.id)
