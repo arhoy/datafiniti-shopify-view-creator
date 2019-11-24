@@ -94,7 +94,7 @@ router.get('/review/:reviewId', async (req, res) => {
 // Description  :   Edit the specific review
 // Access       :   Only user can edit review
 router.put(
-  'review/:reviewId',
+  '/review/:reviewId',
   auth,
   [
     check(
