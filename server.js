@@ -33,6 +33,7 @@ app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/reviews', require('./routes/api/reviews'));
 
 app.use('/api/v1/bootcamps', require('./routes/api/bootcamps'));
+app.use('/api/v1/courses', require('./routes/api/courses'));
 
 // middleware
 app.use(errorHandler);
