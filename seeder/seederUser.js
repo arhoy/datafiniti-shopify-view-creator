@@ -1,7 +1,7 @@
 /***
 
- For bulk uploading -> node seederCourse -import
- For bulk deleteing -> node seederCourse -delete
+ For bulk uploading -> node seederUser -import
+ For bulk deleteing -> node seederUser -delete
 
  Make sure in seeder directory.
  ***/
@@ -15,7 +15,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: '../config/config.env' });
 
 // Load models
-const Course = require('../models/Course');
+const User = require('../models/User');
 
 // Connect to db
 mongoose.connect(process.env.MONGO_URI, {
@@ -26,12 +26,12 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 // Read JSON files
-const courses = JSON.parse(fs.readFileSync(`../_data/courses.json`, `utf-8`));
+const users = JSON.parse(fs.readFileSync(`../_data/users.json`, `utf-8`));
 
 // import all the data into the database
 const importData = async () => {
   try {
-    await Course.create(courses);
+    await User.create(users);
     console.info('Data was imported'.green.inverse);
   } catch (error) {
     console.error('There was an error', error);
@@ -42,11 +42,12 @@ const importData = async () => {
 // delete all data
 const deleteData = async () => {
   try {
-    await Course.deleteMany();
+    await User.deleteMany();
     console.info('Data was deleted from db'.green.inverse);
   } catch (error) {
     console.error('There was an error', error);
   }
+  process.exit();
 };
 
 if (process.argv[2] === '-import') {
@@ -55,4 +56,6 @@ if (process.argv[2] === '-import') {
 
 if (process.argv[2] === '-delete') {
   deleteData();
+} else if (process.arg) {
+  console.error('Invalid flag in seeder file'.red.bold);
 }

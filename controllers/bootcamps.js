@@ -9,76 +9,7 @@ const geocoder = require('../utils/geocoder');
 // desc: Get all the bootcamps
 // access: Public
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
-  let query;
-
-  // build up query part 1
-  const reqQuery = { ...req.query };
-
-  // Fields to exclude
-  const removeFields = ['select', 'sort', 'page', 'limit'];
-  removeFields.forEach(param => delete reqQuery[param]);
-
-  // build up query part 2
-  let queryString = JSON.stringify(reqQuery);
-  queryString = queryString.replace(
-    /\b(gt|gte|lte|lt|in)\b/g,
-    match => `$${match}`,
-  );
-
-  query = Bootcamp.find(JSON.parse(queryString)).populate('courses');
-
-  // select fields
-  if (req.query.select) {
-    const fields = req.query.select.split(',').join(' ');
-    // mongoose select
-    query = query.select(fields);
-  }
-
-  // sort fields
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(',').join(' ');
-
-    // mongoose sort
-    query = query.sort(sortBy);
-  } else {
-    query = query.sort('-createdAt');
-  }
-
-  // pagination
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit) || 10;
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const total = await Bootcamp.countDocuments();
-
-  query = query.skip(startIndex).limit(limit);
-
-  // execute the query
-  const bootcamps = await query;
-
-  // pagination result;
-  const pagination = {};
-
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit,
-    };
-  }
-
-  if (startIndex > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit,
-    };
-  }
-
-  res.status(200).json({
-    success: true,
-    items: bootcamps.length,
-    pagination,
-    data: bootcamps,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // type : GET
@@ -106,6 +37,18 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 // desc: Create a bootcamp
 // access: Private
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
+  // Add user id to request body to add to database
+  req.body.user = req.user.id;
+
+  // check for published bootcamp
+  const publishedBootcamp = await Bootcamp.findOne({ user: req.user.id });
+
+  // can only add one bootcamp if publisher
+  if (publishedBootcamp && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse('User has already one bootcamp published!', 401),
+    );
+  }
   const bootcamp = await Bootcamp.create(req.body);
   return res.status(200).json({ success: true, data: bootcamp });
 });
@@ -115,10 +58,8 @@ exports.createBootcamp = asyncHandler(async (req, res, next) => {
 // desc: Update a bootcamp
 // access: Private
 exports.updateBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  let bootcamp = await Bootcamp.findById(req.params.id);
+  // check if bootcamp exists
   if (!bootcamp) {
     return next(
       new ErrorResponse(
@@ -127,6 +68,21 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
       ),
     );
   }
+  // check if bootcamp created user is the one updating. Admin can update any bootcamp
+  if (req.user.id !== bootcamp.user.toString() && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `You cannot update this bootcamp because it was not created by you!`,
+        401,
+      ),
+    );
+  }
+  // Looks good!, update the bootcamp
+  bootcamp = await Bootcamp.findOneAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
   res.status(200).json({ success: true, data: bootcamp });
 });
 
@@ -145,6 +101,17 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // check if bootcamp created user is the one deleting. Admin can dekete any bootcamp
+  if (req.user.id !== bootcamp.user.toString() && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `You cannot delete this bootcamp because it was not created by you!`,
+        401,
+      ),
+    );
+  }
+
+  // delete the bootcamp
   bootcamp.remove();
   res.status(200).json({ success: true, msg: 'DELETE bootcamp' });
 });
@@ -155,9 +122,21 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 // access: Private
 exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamp.findById(req.params.id);
+
+  // bootcamp exists
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404),
+    );
+  }
+
+  // check if bootcamp created user is the one updating. Admin can update any bootcamp
+  if (req.user.id !== bootcamp.user.toString() && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `You cannot update this bootcamp because it was not created by you!`,
+        401,
+      ),
     );
   }
   if (!req.files) {

@@ -9,22 +9,16 @@ const Bootcamp = require('../models/Bootcamp');
 // desc:   Get all the courses
 // access: Public
 exports.getCourses = asyncHandler(async (req, res, next) => {
-  let query;
-
   if (req.params.bootcampId) {
-    query = Course.find({ bootcamp: req.params.bootcampId });
-  } else {
-    query = Course.find().populate({
-      path: 'bootcamp',
-      select: 'name description',
+    const courses = await Course.find({ bootcamp: req.params.bootcampId });
+    return res.status(200).json({
+      success: true,
+      items: courses.length,
+      data: courses,
     });
+  } else {
+    return res.status(200).json(res.advancedResults);
   }
-  const courses = await query;
-  res.status(200).json({
-    success: true,
-    items: courses.length,
-    data: courses,
-  });
 });
 
 // type :  GET
@@ -63,8 +57,20 @@ exports.addCourse = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // ensure bootcamp owner is adding their course collection
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        'Only bootcamp owner can add a course to their bootcamp collection',
+      ),
+    );
+  }
+
   // insert the bootcampId into the course
   req.body.bootcamp = req.params.bootcampId;
+
+  // insert the userId into the course model
+  req.body.user = req.user.id;
 
   // create course
   const course = await Course.create(req.body);
