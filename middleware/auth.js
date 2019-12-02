@@ -29,7 +29,6 @@ exports.protect = asynHandler(async (req, res, next) => {
   }
 
   if (!token) {
-    console.log(token);
     return next(new ErrorResponse('You do not have access to this route', 401));
   }
 

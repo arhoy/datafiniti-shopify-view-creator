@@ -16,6 +16,7 @@
     "no-unused-vars": "warn",
     "no-process-env": "off",
     "no-undef": "off",
-    "require-atomic-updates": "off"
+    "require-atomic-updates": "off",
+    "no-useless-escape": "warn"
   }
 }

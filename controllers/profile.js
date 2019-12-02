@@ -1,5 +1,5 @@
 const ErrorResponse = require('../utils/errorResponse');
-const Bootcamp = require('../models/Bootcamp');
+
 const asyncHandler = require('../middleware/async');
 
 // type :       GET

@@ -17,6 +17,7 @@ const Bootcamp = require('../../models/Bootcamp');
 // Include other resource routers
 const courseRouter = require('./courses');
 
+// init router
 const router = express.Router();
 
 // middleware

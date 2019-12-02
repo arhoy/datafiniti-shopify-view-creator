@@ -42,15 +42,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // use Routes!
 
-// admin route
+// authentication
+app.use('/api/v1/auth', require('./routes/api/auth'));
+
+// admin routes
 app.use('/api/v1/auth/users', require('./routes/api/users'));
 
+// user profiles
 app.use('/api/v1/profile', require('./routes/api/profile'));
-// app.use('/api/reviews', require('./routes/api/reviews'));
 
-app.use('/api/v1/auth', require('./routes/api/auth'));
+// bootcamps
 app.use('/api/v1/bootcamps', require('./routes/api/bootcamps'));
+
+// bootcamp courses
 app.use('/api/v1/courses', require('./routes/api/courses'));
+
+// relates to product slug reviews
+app.use('/api/v1/reviews', require('./routes/api/reviews'));
 
 // middleware
 app.use(errorHandler);

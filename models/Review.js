@@ -1,3 +1,4 @@
+// Review Model based on the Product Slug
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -6,20 +7,24 @@ const ReviewSchema = new Schema(
     productSlug: {
       type: String,
       required: [true, 'Review must be attached to a product slug'],
+      trim: true,
     },
     title: {
       type: String,
-      required: [true, 'Review must have a title'],
+      required: [true, 'Your product review must have a title!'],
       trim: true,
-      maxlength: [30, 'Your review must be less than 30 characters'],
-      minlength: [10, 'Your review must be 10 or more characters'],
+      maxlength: [30, 'Your review title must be less than 30 characters'],
+      minlength: [10, 'Your review title must be 10 or more characters'],
     },
     description: {
       type: String,
-      required: [true, 'Review must not be empty'],
+      required: [true, 'Your review description must not be empty'],
       trim: true,
-      maxlength: [300, 'Your review must be less than 300 characters'],
-      minlength: [10, 'Your review must be 10 or more characters'],
+      maxlength: [
+        300,
+        'Your review description must be less than 300 characters',
+      ],
+      minlength: [10, 'Your review description must be 10 or more characters'],
     },
     createdAt: {
       type: Date,
@@ -27,8 +32,8 @@ const ReviewSchema = new Schema(
     },
     rating: {
       type: Number,
-      min: [1, 'Rating must be one between 1 and 5 stars'],
-      max: [5, 'Rating must be one between 1 and 5 stars'],
+      min: [1, 'Your review rating must be one between 1 and 5 stars'],
+      max: [5, 'Your review rating must be one between 1 and 5 stars'],
     },
     user: {
       type: Schema.Types.ObjectId,
