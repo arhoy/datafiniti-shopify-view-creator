@@ -26,6 +26,10 @@ exports.protect = asynHandler(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+
+    // attach token to cookies see auth controller send response token
+  } else if (req.cookies.token) {
+    token = req.cookies.token;
   }
 
   if (!token) {
@@ -45,24 +49,3 @@ exports.protect = asynHandler(async (req, res, next) => {
   }
   // checking cookies
 });
-
-// module.exports = function(req, res, next) {
-//   // Get token from header
-//   const token = req.header('x-auth-token');
-
-//   // Check if not token
-//   if (!token) {
-//     return res.status(401).json({ msg: 'No token, authorization denied' });
-//   }
-
-//   // Verify tokens
-//   try {
-//     const decoded = jwt.verify(token, config.get('jwtSecret'));
-
-//     req.user = decoded.user;
-
-//     next();
-//   } catch (err) {
-//     res.status(401).json({ msg: 'Token is not valid' });
-//   }
-// };

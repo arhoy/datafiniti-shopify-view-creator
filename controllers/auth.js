@@ -88,6 +88,18 @@ exports.getMe = asyncHandler(async (req, res, next) => {
   return res.status(200).json({ success: true, data: user });
 });
 
+// type :           GET
+// route:           api/v1/auth/logout
+// desc:            Log current user out
+// access:          Private
+// return value:    user object minus password
+exports.logout = asyncHandler(async (req, res) => {
+  // we have access to cookie via cookie parser
+  res.clearCookie('token');
+
+  return res.status(200).json({ success: true, data: {} });
+});
+
 // type :           POST
 // route:           api/v1/auth/forgotpassword
 // desc:            Route to send reset token to email

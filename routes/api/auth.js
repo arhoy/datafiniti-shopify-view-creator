@@ -7,7 +7,7 @@ const {
   resetPassword,
   updateDetails,
   updatePassword,
-  getAllUsers,
+  logout,
 } = require('../../controllers/auth');
 
 // import models!
@@ -27,5 +27,6 @@ router.put('/resetpassword/:resettoken', resetPassword);
 router.put('/updateDetails', protect, updateDetails);
 router.put('/updatepassword', protect, updatePassword);
 router.get('/me', protect, getMe);
+router.get('/logout', protect, logout);
 
 module.exports = router;

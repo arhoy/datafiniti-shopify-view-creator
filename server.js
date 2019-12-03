@@ -57,6 +57,12 @@ app.use('/api/v1/bootcamps', require('./routes/api/bootcamps'));
 // bootcamp courses
 app.use('/api/v1/courses', require('./routes/api/courses'));
 
+// bootcamp course reviews
+app.use(
+  '/api/v1/bootcampcoursereview',
+  require('./routes/api/bootcampCourseReview'),
+);
+
 // relates to product slug reviews
 app.use('/api/v1/reviews', require('./routes/api/reviews'));
 
