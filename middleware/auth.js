@@ -27,7 +27,7 @@ exports.protect = asynHandler(async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(' ')[1];
 
-    // attach token to cookies see auth controller send response token
+    // attach token to cookies. See auth controller send response token
   } else if (req.cookies.token) {
     token = req.cookies.token;
   }

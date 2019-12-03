@@ -3,14 +3,28 @@ const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+
 // eslint-disable-next-line no-unused-vars
 const colors = require('colors');
 const fileupload = require('express-fileupload');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
+// security
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
+
 const errorHandler = require('./middleware/errorHandler');
 const connectDB = require('./config/db');
+
+// rate limiting
+const {
+  apiLimiter,
+  resetPasswordLimiter,
+  accountRegister,
+} = require('./middleware/rateLimiting');
 
 // load environmental variables
 dotenv.config({ path: './config/config.env' });
@@ -37,11 +51,23 @@ if (process.env.NODE_ENV == 'development') {
 // file uploading
 app.use(fileupload());
 
+// init security headers / sanitize data / xss attack
+app.use(helmet());
+app.use(mongoSanitize());
+app.use(xss());
+
+// limit api requests to those above
+app.use('/api', apiLimiter);
+app.use('/api/v1/auth/resetpassword/', resetPasswordLimiter);
+app.use('/api/v1/auth/register', accountRegister);
+
+// Prevent http param pollution
+app.use(hpp());
+
 // set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
 // use Routes!
-
 // authentication
 app.use('/api/v1/auth', require('./routes/api/auth'));
 
