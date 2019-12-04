@@ -61,9 +61,7 @@ typings/
 .env.development
 # ignore all .env files
 
-# gatsby files
-.cache/
-public
+
 
 # Mac files
 .DS_Store
