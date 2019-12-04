@@ -60,7 +60,6 @@ typings/
 .env.production
 .env.development
 # ignore all .env files
-*.env
 
 # gatsby files
 .cache/
