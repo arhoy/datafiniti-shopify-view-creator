@@ -1,5 +1,5 @@
 # MOST IMPORTANT where all the keys are stored
-/config/default.json
+
 /config/config.env
 
 # Logs
