@@ -2,6 +2,9 @@ const ErrorResponse = require('../utils/errorResponse');
 
 const asyncHandler = require('../middleware/async');
 
+const Profile = require('../models/Profile');
+const User = require('../models/User');
+
 // type :       GET
 // route:       api/v1/profile
 // desc:        Get all profiles
@@ -15,14 +18,17 @@ exports.getAllProfiles = asyncHandler(async (req, res, next) => {
 // desc:        Get logged in users profile
 // access:      PRIVATE
 exports.getCurrentProfile = asyncHandler(async (req, res, next) => {
-  const profile = await Profile.findOne({ user: req.user.id });
+  const profile = await Profile.findOne({ user: req.user.id }).populate({
+    path: 'user',
+    select: 'name email',
+  });
 
   // check if profile exists
   if (!profile) {
     return next(new ErrorResponse('Profile was not found', 400));
   }
   // check if the user in profile matches the logged in user id.
-  if (profile.user.toString() !== req.user.id) {
+  if (profile.user.id.toString() !== req.user.id) {
     return next(
       new ErrorResponse(
         `Not authorized to access this profile ${profile.name}`,
