@@ -16,7 +16,6 @@ exports.getAllReviews = asyncHandler(async (req, res, next) => {
 // Description  :   User creates new review for specific product Slug
 // Access       :   Any one logged in can create a review
 exports.createNewReview = asyncHandler(async (req, res, next) => {
-  console.log('creating review'.yellow.bold);
   const { rating, description, title } = req.body;
 
   const review = await new Review({
@@ -108,6 +107,8 @@ exports.getAllReviewsForSpecificProduct = asyncHandler(
         new ErrorResponse('Was not able to find review for the product', 404),
       );
     }
+    // modify to filter for correct data
+    res.advancedResults.data = reviews;
     res.status(200).json(res.advancedResults);
   },
 );

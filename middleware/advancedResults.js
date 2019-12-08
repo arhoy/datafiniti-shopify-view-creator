@@ -1,3 +1,5 @@
+// Advanced Results for sorting and Pagination
+
 const advancedResults = (model, populate) => async (req, res, next) => {
   let query;
 
@@ -11,6 +13,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
+  // query
   query = model.find(JSON.parse(queryStr));
 
   if (req.query.select) {
