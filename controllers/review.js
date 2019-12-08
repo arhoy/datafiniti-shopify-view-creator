@@ -108,11 +108,7 @@ exports.getAllReviewsForSpecificProduct = asyncHandler(
         new ErrorResponse('Was not able to find review for the product', 404),
       );
     }
-    res.json({
-      status: 'success',
-      items: reviews.length,
-      data: reviews,
-    });
+    res.status(200).json(res.advancedResults);
   },
 );
 

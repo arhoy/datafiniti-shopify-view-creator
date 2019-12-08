@@ -35,6 +35,11 @@ const ReviewSchema = new Schema(
       min: [1, 'Your review rating must be one between 1 and 5 stars'],
       max: [5, 'Your review rating must be one between 1 and 5 stars'],
     },
+    averageRating: {
+      type: Number,
+      min: [1, 'Your review rating must be one between 1 and 5 stars'],
+      max: [5, 'Your review rating must be one between 1 and 5 stars'],
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',

@@ -22,7 +22,9 @@ const { protect } = require('../../middleware/auth');
 
 // routes!
 router.route('/').get(advancedResults(Review), getAllReviews);
-router.route('/:productSlug').get(getAllReviewsForSpecificProduct);
+router
+  .route('/:productSlug')
+  .get(advancedResults(Review), getAllReviewsForSpecificProduct);
 
 router.route('/review/:reviewId').get(getSpecificReview);
 

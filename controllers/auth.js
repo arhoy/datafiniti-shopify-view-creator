@@ -34,7 +34,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 // access:          Public, anyone can register
 // return value:    token
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, passwordConfirm, role } = req.body;
   const user = await User.create({ name, email, password, role });
   sendTokenResponse(user, 200, res);
 });
@@ -133,7 +133,10 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
       message,
     });
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({
+      success: true,
+      data: 'A password reset link has been sent to your email',
+    });
   } catch (error) {
     // if not able to send email, then
     console.error(error);
