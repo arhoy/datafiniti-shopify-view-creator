@@ -92,6 +92,9 @@ app.use(
 // relates to product slug reviews
 app.use('/api/v1/reviews', require('./routes/api/reviews'));
 
+// // amazon products
+app.use('/api/v1/amazonproducts', require('./routes/api/amazonproducts'));
+
 // middleware
 app.use(errorHandler);
 
