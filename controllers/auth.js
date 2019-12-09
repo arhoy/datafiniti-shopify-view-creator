@@ -155,8 +155,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 // access:          Private, must have the token and link
 exports.resetPassword = asyncHandler(async (req, res, next) => {
   // get hashed token
-  console.log(req.body.token);
-  console.log(req.body);
+
   const resetPasswordToken = crypto
     .createHash('sha256')
     .update(req.body.token)
@@ -167,8 +166,6 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     resetPasswordToken,
     resetPasswordExpire: { $gt: Date.now() },
   });
-
-  console.log('user is', user);
 
   if (!user) {
     return next(new ErrorResponse('Invalid Token or token has expired!', 400));
