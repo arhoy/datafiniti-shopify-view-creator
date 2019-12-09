@@ -10,7 +10,7 @@ exports.apiLimiter = rateLimit({
 // Rate limit the reset password route
 exports.resetPasswordLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour window
-  max: 30, // start blocking after 3 requests
+  max: 300, // start blocking after 3 requests
   message: 'Too many password resets in time frame. Please try again later',
 });
 

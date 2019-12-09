@@ -34,7 +34,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 // access:          Public, anyone can register
 // return value:    token
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password, passwordConfirm, role } = req.body;
+  const { name, email, password, role } = req.body;
   const user = await User.create({ name, email, password, role });
   sendTokenResponse(user, 200, res);
 });
@@ -120,17 +120,20 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // create reset URL
-  const resetUrl = `${req.protocol}://${req.get(
-    'host',
-  )}/api/v1/auth/resetpassword/${resetToken}`;
+  const resetUrl = `${process.env.FRONT_END_URL_PRODUCTION}/resetpassword/?${resetToken}`;
 
   const message = `Did you request a password reset? If so please click on the link below to reset your password If not you can safely ignore this email \n\n ${resetUrl}`;
+
+  const html = `<p>
+  Did you request a password reset? If so please click on the link below to reset your password If not you can safely ignore this email <br/><br/> <a href = ${resetUrl} > Reset Here</a> 
+  </p>`;
 
   try {
     await sendEmail({
       email: user.email,
       subject: 'Password Reset Token',
       message,
+      html,
     });
 
     return res.status(200).json({
@@ -152,9 +155,11 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 // access:          Private, must have the token and link
 exports.resetPassword = asyncHandler(async (req, res, next) => {
   // get hashed token
+  console.log(req.body.token);
+  console.log(req.body);
   const resetPasswordToken = crypto
     .createHash('sha256')
-    .update(req.params.resettoken)
+    .update(req.body.token)
     .digest('hex');
 
   // get user but only if token is not expired
@@ -162,6 +167,8 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     resetPasswordToken,
     resetPasswordExpire: { $gt: Date.now() },
   });
+
+  console.log('user is', user);
 
   if (!user) {
     return next(new ErrorResponse('Invalid Token or token has expired!', 400));
@@ -176,6 +183,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
   return res.status(200).json({
     success: true,
+    data: 'Password Reset Success',
   });
 });
 
