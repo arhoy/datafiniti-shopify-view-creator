@@ -10,6 +10,20 @@ exports.getAmazonProducts = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
+// type : GET
+// route: api/v1/amazonproducts/:slug
+// desc: Get specific amazon product by slug
+// access: Public
+exports.getAmazonProduct = asyncHandler(async (req, res, next) => {
+  const product = await AmazonProduct.findOne({ slug: req.params.slug });
+  if (!product) {
+    return next(
+      new ErrorResponse('Did not find current product in the database'),
+    );
+  }
+  return res.status(200).json({ success: true, data: product });
+});
+
 // type : POST
 // route: api/v1/amazonproducts
 // desc: Create a amazonproduct

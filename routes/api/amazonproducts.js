@@ -2,6 +2,7 @@ const express = require('express');
 
 const {
   getAmazonProducts,
+  getAmazonProduct,
   createAmazonProduct,
 } = require('../../controllers/amazonproducts');
 
@@ -17,6 +18,7 @@ const { protect, authorize } = require('../../middleware/auth');
 
 // routes!
 router.route('/').get(advancedResults(AmazonProduct), getAmazonProducts);
+router.route('/:slug').get(getAmazonProduct);
 
 // init protect on all routes below
 router.use(protect);
