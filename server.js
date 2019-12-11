@@ -4,8 +4,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 
-// eslint-disable-next-line no-unused-vars
-const colors = require('colors');
+require('colors');
 const fileupload = require('express-fileupload');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -94,6 +93,24 @@ app.use('/api/v1/reviews', require('./routes/api/reviews'));
 
 // // amazon products
 app.use('/api/v1/amazonproducts', require('./routes/api/amazonproducts'));
+
+// // amazon home and decore
+app.use(
+  '/api/v1/amazon-home-and-decore',
+  require('./routes/api/amazon-home-and-decore'),
+);
+
+// // amazon tools
+app.use('/api/v1/amazon-tools', require('./routes/api/amazon-tools'));
+
+// // amazon automotive
+app.use('/api/v1/amazon-automotive', require('./routes/api/amazon-automotive'));
+
+// // amazon electronics
+app.use(
+  '/api/v1/amazon-electronics',
+  require('./routes/api/amazon-electronics'),
+);
 
 // middleware
 app.use(errorHandler);
