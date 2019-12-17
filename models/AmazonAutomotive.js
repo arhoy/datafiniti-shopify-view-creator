@@ -58,4 +58,7 @@ AmazonAutomotiveSchema.pre('save', function(next) {
   next();
 });
 
+// adding text to Mongoose Schema
+AmazonAutomotiveSchema.index({ name: 'text' });
+
 module.exports = mongoose.model('AmazonAutomotives', AmazonAutomotiveSchema);

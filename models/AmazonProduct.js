@@ -58,4 +58,7 @@ AmazonProductSchema.pre('save', function(next) {
   next();
 });
 
+// adding text to Mongoose Schema
+AmazonProductSchema.index({ name: 'text' });
+
 module.exports = mongoose.model('AmazonProducts', AmazonProductSchema);

@@ -16,8 +16,27 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   // Create operators ($gt, $gte, etc)
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
+  // modify query string for user keyword search
+  if (req.query.keywords) {
+    const inputString = `"keywords":"${req.query.keywords}"`;
+
+    queryStr = queryStr.replace(
+      inputString,
+      `"$text":{"$search":"${req.query.keywords}"}`,
+    );
+
+    let parsed = JSON.parse(queryStr);
+
+    query = model.find(parsed);
+  } else {
+    // Finding resource
+    query = model.find(JSON.parse(queryStr));
+  }
+
+  // example pass into find: { priceValue: { '$gt': '100' } }
+  // example pass into find: { priceValue: { $gt: '400' }, $text: { $search: 'black iphone' }
+
   // Finding resource
-  query = model.find(JSON.parse(queryStr));
 
   // Select Fields
   if (req.query.select) {
@@ -69,7 +88,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   res.advancedResults = {
     success: true,
     totalCount: total,
-    count: results.length,
+    items: results.length,
     pagination,
     data: results,
   };

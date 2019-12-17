@@ -58,4 +58,7 @@ AmazonToolSchema.pre('save', function(next) {
   next();
 });
 
+// adding text to Mongoose Schema
+AmazonToolSchema.index({ name: 'text' });
+
 module.exports = mongoose.model('AmazonTools', AmazonToolSchema);

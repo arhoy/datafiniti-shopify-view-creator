@@ -58,4 +58,7 @@ AmazonElectronicSchema.pre('save', function(next) {
   next();
 });
 
+// adding text to Mongoose Schema
+AmazonElectronicSchema.index({ name: 'text' });
+
 module.exports = mongoose.model('AmazonElectronics', AmazonElectronicSchema);

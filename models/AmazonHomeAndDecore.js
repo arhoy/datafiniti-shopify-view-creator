@@ -58,6 +58,9 @@ AmazonHomeAndDecoreSchema.pre('save', function(next) {
   next();
 });
 
+// adding text to Mongoose Schema
+AmazonHomeAndDecoreSchema.index({ name: 'text' });
+
 module.exports = mongoose.model(
   'AmazonHomeAndDecores',
   AmazonHomeAndDecoreSchema,
