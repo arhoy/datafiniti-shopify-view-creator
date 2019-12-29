@@ -6,9 +6,9 @@ const amazon = require('amazon-product-api');
 // access: Public
 exports.getAmazonProductAPI = (req, res, next) => {
   const client = amazon.createClient({
-    awsId: 'AKIAITXTHLMBKKJZQ3TQ',
-    awsSecret: '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',
-    awsTag: 'fashionfive-20',
+    awsId: process.env.awsId,
+    awsSecret: process.env.awsSecret,
+    awsTag: process.env.awsTag,
   });
   client
     .itemSearch({
