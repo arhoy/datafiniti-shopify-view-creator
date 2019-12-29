@@ -1,13 +1,10 @@
-const ErrorResponse = require('../utils/errorResponse');
 const amazon = require('amazon-product-api');
 
-const asyncHandler = require('../middleware/async');
-
 // type : GET
-// route: api/v1/amazon-home-and-decore
-// desc: Get all the amazon-home-and-decore
+// route: api/v1/amazon-products-api
+// desc: Get the amazon products
 // access: Public
-exports.getAmazonProductAPI = asyncHandler(async (req, res, next) => {
+exports.getAmazonProductAPI = (req, res, next) => {
   const client = amazon.createClient({
     awsId: 'AKIAITXTHLMBKKJZQ3TQ',
     awsSecret: '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',
@@ -15,21 +12,27 @@ exports.getAmazonProductAPI = asyncHandler(async (req, res, next) => {
   });
   client
     .itemSearch({
-      director: 'Quentin Tarantino',
-      actor: 'Samuel L. Jackson',
-      searchIndex: 'DVD',
-      audienceRating: 'R',
+      keywords: req.query.keywords || 'iphone',
+      searchIndex: 'All',
       responseGroup: 'ItemAttributes,Offers,Images',
-      itemPage: 1,
       availability: 'Available',
       domain: 'webservices.amazon.ca',
     })
     .then(function(results) {
-      console.log('FUCKING RESULTS: ', results);
       return res.status(200).json({ sucess: true, data: results });
     })
     .catch(function(err) {
-      console.log('FUCKING EH', err);
+      console.log('There as an error: ', err);
       return res.status(400).json({ success: false, data: {} });
     });
-});
+};
+
+// type : GET
+// route: api/v1/amazon-products-api/test
+// desc: Get the amazon products
+// access: Public
+exports.getAmazonTest = (req, res, next) => {
+  return res
+    .status(200)
+    .json({ success: true, data: {}, keyword: req.query.keywords });
+};
