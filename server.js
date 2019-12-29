@@ -112,6 +112,12 @@ app.use(
   require('./routes/api/amazon-electronics'),
 );
 
+// use THE Amazon API
+app.use(
+  '/api/v1/amazon-product-api',
+  require('./routes/api/amazon-product-api'),
+);
+
 // middleware
 app.use(errorHandler);
 

@@ -7,7 +7,7 @@ const asyncHandler = require('../middleware/async');
 // desc: Get all the amazon-home-and-decore
 // access: Public
 exports.getAllAmazonAutomotive = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.advancedResults);
+  return res.status(200).json(res.advancedResults);
 });
 
 // type : GET

@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "amazon-product-api": "^0.4.4",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "config": "^3.2.4",
