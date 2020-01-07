@@ -27,6 +27,7 @@ exports.createNewReview = asyncHandler(async (req, res, next) => {
   });
 
   await review.save();
+
   res.status(200).json({ success: true, data: review });
 });
 
@@ -67,7 +68,7 @@ exports.updateSpecificReview = asyncHandler(async (req, res, next) => {
   const editedReview = await Review.findByIdAndUpdate(
     req.params.reviewId,
     { $set: { rating, description, title } },
-    { new: true },
+    { new: true, runValidators: true },
   );
 
   res.status(200).json({ success: true, data: editedReview });
