@@ -52,8 +52,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // use Routes!
 
-// The simple Test Route
+// Default Get Products
 app.use('/api/v1/datafiniti', require('./routes/api/datafiniti'));
+
+// Get Canada Products
+app.use('/api/v1/datafinitiCanada', require('./routes/api/datafinitiCanada'));
+
+// Get Realty Data from Datafinity
+app.use('/api/v1/datafinitiRealty', require('./routes/api/datafinitiRealty'));
 
 // middleware
 app.use(errorHandler);

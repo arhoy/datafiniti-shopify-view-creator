@@ -1,11 +1,11 @@
 const slugify = require('slugify');
 
-const findAvgPrice = require('../utils/findAvgPrice');
+const findAvgPrice = require('./findAvgPrice');
 
 const LIST_PRICE_MARKUP = 1.15;
-const COMPARE_PRICE_MARKUP = 1.2;
+const COMPARE_PRICE_MARKUP = 1.25;
 
-const AFRICAN_CURRENCY = 600;
+const CANADA_CURRENCY = 1.3;
 
 // get rawData from data finity and turn into clean data
 // UTIL FUNCTION THAT HANDLES WHAT GOES INTO THE CLEAN DATA
@@ -42,12 +42,12 @@ const rawToCleanData = data => {
       'Variant Inventory Policy': 'deny',
       'Variant Fulfillment Service': 'manual',
       'Variant Price': Math.round(
-        findAvgPrice(item.prices) * LIST_PRICE_MARKUP * AFRICAN_CURRENCY,
+        findAvgPrice(item.prices) * LIST_PRICE_MARKUP * CANADA_CURRENCY,
         2,
       ),
       'Variant Compare At Price': Math.round(
         Math.round(
-          findAvgPrice(item.prices) * COMPARE_PRICE_MARKUP * AFRICAN_CURRENCY,
+          findAvgPrice(item.prices) * COMPARE_PRICE_MARKUP * CANADA_CURRENCY,
           2,
         ),
       ),
@@ -60,7 +60,7 @@ const rawToCleanData = data => {
       'SEO Description': '',
       'Variant Weight Unit': 'kg',
       'Cost per item': Math.round(
-        findAvgPrice(item.prices) * AFRICAN_CURRENCY,
+        findAvgPrice(item.prices) * CANADA_CURRENCY,
         2,
       ),
     });
